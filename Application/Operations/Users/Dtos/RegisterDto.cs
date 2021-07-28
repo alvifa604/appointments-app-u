@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 
-namespace Domain
+namespace Application.Operations.Users.Dtos
 {
-    public class User 
+    public class RegisterDto
     {
-        public int Id { get; set; }
         public string IdDocument { get; set; }
         public string Name { get; set; }
         public string FirstLastname { get; set; }
@@ -14,8 +12,5 @@ namespace Domain
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
-        public int RoleId { get; set; }
-        public Role Role { get; set; }
-        public ICollection<Appointment> Appointments { get; set; }
     }
 }

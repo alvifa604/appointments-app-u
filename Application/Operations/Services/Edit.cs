@@ -13,6 +13,13 @@ namespace Application.Operations.Services
         {
             public ServiceDto Service { get; set; }
         }
+        public class CommandValidator : AbstractValidator<ServiceDto>
+        {
+            public CommandValidator()
+            {
+                RuleFor(s => s.Name).NotEmpty();
+            }
+        }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
@@ -22,14 +29,6 @@ namespace Application.Operations.Services
                 _context = context;
             }
 
-            public class CommandValidator : AbstractValidator<ServiceDto>
-            {
-                public CommandValidator()
-                {
-                    RuleFor(s => s.Id).NotEmpty();
-                    RuleFor(s => s.Name).NotEmpty();
-                }
-            }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -44,7 +43,7 @@ namespace Application.Operations.Services
                 //Verifica si se guardaron
                 if (result > 0) return Result<Unit>.Success(Unit.Value);
                 if (result == 0) return Result<Unit>.Failure("No hubo cambios en la base de datos");
-                
+
                 return Result<Unit>.Failure("Error guardando en la base de datos");
             }
         }

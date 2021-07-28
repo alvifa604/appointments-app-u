@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
@@ -9,9 +10,10 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210728220010_AdditionalChangesUser")]
+    partial class AdditionalChangesUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,7 +126,8 @@ namespace Persistence.Migrations
 
                     b.HasIndex("IdDocument");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.ToTable("User");
                 });
@@ -151,8 +154,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.User", b =>
                 {
                     b.HasOne("Domain.Role", "Role")
-                        .WithMany("User")
-                        .HasForeignKey("RoleId")
+                        .WithOne("User")
+                        .HasForeignKey("Domain.User", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

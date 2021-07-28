@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain
@@ -8,6 +9,6 @@ namespace Domain
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-        public User User { get; set; }
+        public ICollection<User> User { get; set; }
     }
 }

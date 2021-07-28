@@ -1,10 +1,11 @@
 using System;
 using System.Text;
-using API.Services;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Security;
 
 namespace API.Extensions
 {
@@ -30,8 +31,8 @@ namespace API.Extensions
 
                 });
 
-            services.AddScoped<TokenService>();
-
+            services.AddScoped<ITokenService, TokenService>();
+            
             return services;
         }
     }

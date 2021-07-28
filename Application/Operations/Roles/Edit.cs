@@ -13,6 +13,13 @@ namespace Application.Operations.Roles
         {
             public RoleDto Role { get; set; }
         }
+        public class CommandValidator : AbstractValidator<RoleDto>
+        {
+            public CommandValidator()
+            {
+                RuleFor(r => r.Name).NotEmpty();
+            }
+        }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
@@ -22,14 +29,6 @@ namespace Application.Operations.Roles
                 _context = context;
             }
 
-            public class CommandValidator : AbstractValidator<RoleDto>
-            {
-                public CommandValidator()
-                {
-                    RuleFor(r => r.Id).NotEmpty();
-                    RuleFor(r => r.Name).NotEmpty();
-                }
-            }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -39,10 +38,12 @@ namespace Application.Operations.Roles
 
                 //Editar el rol y guarda los cambios
                 role.Name = request.Role.Name;
-                var success = await _context.SaveChangesAsync() > 0;
+                var result = await _context.SaveChangesAsync();
 
                 //Verifica si se guardaron
-                if (success) return Result<Unit>.Success(Unit.Value);
+                if (result > 0) return Result<Unit>.Success(Unit.Value);
+                if (result == 0) return Result<Unit>.Failure("No hubo cambios en la base de datos");
+
                 return Result<Unit>.Failure("Error guardando en la base de datos");
             }
         }

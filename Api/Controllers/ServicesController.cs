@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
 using Application.Operations.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize(Roles = "admin,doctor")]
     public class ServicesController : BaseApiController
     {
         //Endpoint para obtener la lista de servicios

@@ -1,5 +1,6 @@
 using BC = BCrypt.Net.BCrypt;
-namespace Api.Services
+
+namespace Application.Core
 {
     public static class PasswordService
     {

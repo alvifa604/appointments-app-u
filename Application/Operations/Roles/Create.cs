@@ -39,7 +39,7 @@ namespace Application.Operations.Roles
                 if (role != null) return Result<Unit>.Failure($"Ya existe el rol {request.Role.Name}");
 
                 //Crea el rol
-                var newRole = new Role() { Name = request.Role.Name };
+                var newRole = new Role() { Name = request.Role.Name.ToLower() };
 
                 //Lo guarda en la base de datos
                 _context.Role.Add(newRole);

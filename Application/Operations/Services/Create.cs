@@ -42,7 +42,7 @@ namespace Application.Operations.Services
                 if (service != null) return Result<Unit>.Failure($"Ya existe el servicio {request.Service.Name}");
                 
                 //Crea el servicio
-                var newService = new Service() { Name = request.Service.Name };
+                var newService = new Service() { Name = request.Service.Name.ToLower() };
 
                 //Lo guarda en la base de datos
                 _context.Service.Add(newService);

@@ -1,15 +1,16 @@
+using Application.Interfaces;
 using System;
-using System.Collections.Generic; //List
-using System.IdentityModel.Tokens.Jwt; //JwtSecurityTokenHandler
-using System.Security.Claims; //Claim
-using System.Text; //Encoding
-using Domain; //AppUser
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Domain;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens; //SymmetricSecurityKey
+using Microsoft.IdentityModel.Tokens;
 
-namespace API.Services
+namespace Security
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly IConfiguration _config;
         public TokenService(IConfiguration config)
@@ -27,7 +28,7 @@ namespace API.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.IdDocument),
                 new Claim(ClaimTypes.Role, user.Role.Name)
             };
 
