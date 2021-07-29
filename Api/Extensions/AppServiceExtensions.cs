@@ -16,6 +16,19 @@ namespace Api.Extensions
 
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration config)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .AllowAnyOrigin();
+                });
+            });
+
             //Agrega el contexto para manejar la base de datos, se usa un snippet para usarse en heroku
             services.AddDbContext<AppDbContext>(o =>
             {
