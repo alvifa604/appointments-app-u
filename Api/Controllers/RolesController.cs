@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
 using Application.Operations.Roles;
 using Domain;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
 
-    [Authorize(Roles = "admin,doctor")]
+    //[Authorize(Roles = "admin,doctor")]
     public class RolesController : BaseApiController
     {
         //Endpoint para obtener la lista de roles
