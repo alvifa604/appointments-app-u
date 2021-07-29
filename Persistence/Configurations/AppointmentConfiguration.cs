@@ -9,7 +9,7 @@ namespace Persistence.Configurations
         public void Configure(EntityTypeBuilder<Appointment> builder)
         {
             //Configura la tabla de muchos a muchos
-            builder.HasKey(e => new { e.PatientId, e.ServiceId });
+            builder.HasKey(e => new { e.Id });
             builder.HasOne(p => p.Patient).WithMany(a => a.Appointments).HasForeignKey(p => p.PatientId);
             builder.HasOne(s => s.Service).WithMany(a => a.Appointments).HasForeignKey(s => s.ServiceId);
         }

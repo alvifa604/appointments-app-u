@@ -1,10 +1,12 @@
 using Application.Core;
+using Application.Interfaces;
 using Application.Operations.Roles;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
+using Security;
 
 namespace Api.Extensions
 {
@@ -23,6 +25,9 @@ namespace Api.Extensions
 
             //Agrega automapper 
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+            //Agrega el useraccessor
+            services.AddScoped<IUserAccessor, UserAccessor>();
             
             return services;
         }

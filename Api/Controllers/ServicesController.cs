@@ -9,6 +9,7 @@ namespace Api.Controllers
     public class ServicesController : BaseApiController
     {
         //Endpoint para obtener la lista de servicios
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> ListServiceAsync()
         {
