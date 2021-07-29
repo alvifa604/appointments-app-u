@@ -26,8 +26,8 @@ namespace Api
             services.AddControllers().AddFluentValidation(config => //Agrega FluentValidator 
             {
                 config.RegisterValidatorsFromAssemblyContaining<Register>();
-            }); 
-            
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
@@ -46,6 +46,15 @@ namespace Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
             }
+
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(o => o.NoReferrer());
+            app.UseXXssProtection(o => o.EnabledWithBlockMode());
+            app.UseXfo(o => o.Deny());
+            app.UseCspReportOnly(o => o
+                .BlockAllMixedContent()
+                .FrameAncestors( s => s.Self())
+                .ScriptSources(s => s.Self()));
 
             app.UseHttpsRedirection();
 
