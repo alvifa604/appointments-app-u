@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain
@@ -12,5 +11,7 @@ namespace Domain
         public Service Service { get; set; }
         [Required]
         public DateTime Date { get; set; }
+        public bool IsCancelled { get; set; } = false;
+        public bool IsCompleted { get; set; } = false;
     }
 }
