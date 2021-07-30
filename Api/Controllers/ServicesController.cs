@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Authorize(Roles = "admin,doctor")]
     public class ServicesController : BaseApiController
     {
         //Endpoint para obtener la lista de servicios
-        [AllowAnonymous]
+        [Authorize(Roles = "paciente,doctor")]
         [HttpGet]
         public async Task<ActionResult> ListServiceAsync()
         {
@@ -17,6 +16,7 @@ namespace Api.Controllers
         }
 
         //Endpoint para obtener un servicio específico
+        [Authorize(Roles = "paciente,doctor")]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetServiceAsync(int id)
         {
@@ -24,6 +24,7 @@ namespace Api.Controllers
         }
 
         //Endpoint para eliminar un servicio específico
+        [Authorize(Roles = "doctor")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteServiceAsync(int id)
         {
@@ -31,6 +32,7 @@ namespace Api.Controllers
         }
 
         //Endpoint para crear un servicio
+        [Authorize(Roles = "doctor")]
         [HttpPost]
         public async Task<ActionResult> CreateServiceAsync(ServiceDto service)
         {
@@ -38,6 +40,7 @@ namespace Api.Controllers
         }
 
         //Endpoint para editar un servicio específico
+        [Authorize(Roles = "doctor")]
         [HttpPut("{id}")]
         public async Task<ActionResult> EditServiceAsync(int id, ServiceDto service)
         {

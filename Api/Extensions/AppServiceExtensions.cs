@@ -24,8 +24,8 @@ namespace Api.Extensions
                     policy
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()
-                        .WithOrigins("http://localhost:8100");
+                        //.AllowCredentials()
+                        .AllowAnyOrigin();
                 });
             });
 

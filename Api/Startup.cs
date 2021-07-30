@@ -2,8 +2,10 @@ using Api.Extensions;
 using API.Extensions;
 using Application.Operations.Users;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +25,12 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers().AddFluentValidation(config => //Agrega FluentValidator 
+            services.AddControllers(o =>
+            {
+                //Makes authorization required
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                o.Filters.Add(new AuthorizeFilter(policy));
+            }).AddFluentValidation(config => //Agrega FluentValidator 
             {
                 config.RegisterValidatorsFromAssemblyContaining<Register>();
             });
@@ -53,15 +60,19 @@ namespace Api
             app.UseXfo(o => o.Deny());
             app.UseCspReportOnly(o => o
                 .BlockAllMixedContent()
-                .FrameAncestors( s => s.Self())
-                .ScriptSources(s => s.Self()));
+                .FrameAncestors(s => s.Self())
+                .ScriptSources(s => s.Self())
+                .FormActions(s => s.Self())
+                .ImageSources(s => s.Self())
+                .StyleSources(s => s.Self())
+                .StyleSources(s => s.Self()));
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
