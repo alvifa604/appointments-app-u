@@ -32,7 +32,7 @@ namespace Application.Operations.Users
 
                 RuleFor(r => r.Email).EmailAddress().NotEmpty().WithMessage("El correo es obligatorio").MaximumLength(30);
 
-                RuleFor(r => r.Password).NotEmpty().Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}")
+                RuleFor(r => r.Password).NotEmpty().Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$")
                     .WithMessage("La contraseña debe tener letras, números y entre 8 y 16 caracteres");
 
                 RuleFor(r => r.PhoneNumber).NotEmpty().WithMessage("El número de teléfono es obligatorio");
