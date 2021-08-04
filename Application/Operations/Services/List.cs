@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
@@ -27,12 +28,23 @@ namespace Application.Operations.Services
             public async Task<Result<IReadOnlyCollection<ServiceDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 //Obtiene los servicios de la base de datos
-                var services = await _context.Service.ProjectTo<ServiceDto>(_mapper.ConfigurationProvider).ToListAsync();
+                var services = await _context.Service.OrderBy(x => x.Id)
+                    .ProjectTo<ServiceDto>(_mapper.ConfigurationProvider).ToListAsync();
 
                 //Verifica que hayan servicios
                 if (services.Count == 0) return Result<IReadOnlyCollection<ServiceDto>>.Failure("No hay servicios registrados");
 
+                services.ForEach(s =>
+                {
+                    s.Name = CapitalizeFirstLettter(s.Name);
+                });
+
                 return Result<IReadOnlyCollection<ServiceDto>>.Success(services);
+            }
+
+            private string CapitalizeFirstLettter(string word)
+            {
+                return char.ToUpper(word[0]) + word.Substring(1);
             }
         }
     }

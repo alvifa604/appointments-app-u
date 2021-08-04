@@ -8,7 +8,7 @@ namespace Api.Controllers
     public class ServicesController : BaseApiController
     {
         //Endpoint para obtener la lista de servicios
-        [Authorize(Roles = "paciente,doctor")]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult> ListServiceAsync()
         {
@@ -16,7 +16,7 @@ namespace Api.Controllers
         }
 
         //Endpoint para obtener un servicio específico
-        [Authorize(Roles = "paciente,doctor")]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetServiceAsync(int id)
         {
@@ -34,9 +34,9 @@ namespace Api.Controllers
         //Endpoint para crear un servicio
         [Authorize(Roles = "doctor")]
         [HttpPost]
-        public async Task<ActionResult> CreateServiceAsync(ServiceDto service)
+        public async Task<ActionResult> CreateServiceAsync(Create.Command name)
         {
-            return HandleResult(await Mediator.Send(new Create.Command { Service = service }));
+            return HandleResult(await Mediator.Send(name));
         }
 
         //Endpoint para editar un servicio específico

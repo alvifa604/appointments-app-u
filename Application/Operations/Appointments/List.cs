@@ -36,15 +36,15 @@ namespace Application.Operations.Appointments
                 List<AppointmentDto> appointments = new();
                 //Si el usuario posee el rol doctor, le muesta todas las citas
                 if (user.Role.Name == "doctor")
-                    appointments = await _context.Appointment
+                    appointments = await _context.Appointment.OrderBy(x => x.Id)
                         .ProjectTo<AppointmentDto>(_mapper.ConfigurationProvider).ToListAsync();
-                
+
                 //Si el usuario es paciente, sólo le muesta sus citas
                 else
-                    appointments = await _context.Appointment.Where(x => x.PatientId == user.Id)
+                    appointments = await _context.Appointment.Where(x => x.PatientId == user.Id).OrderBy(x => x.Id)
                             .ProjectTo<AppointmentDto>(_mapper.ConfigurationProvider).ToListAsync();
 
-                if (appointments.Count == 0) return Result<IReadOnlyCollection<AppointmentDto>>.NotFound("No hay citas registradas");
+                if (appointments.Count == 0) return Result<IReadOnlyCollection<AppointmentDto>>.Success(appointments);
                 return Result<IReadOnlyCollection<AppointmentDto>>.Success(appointments);
             }
         }

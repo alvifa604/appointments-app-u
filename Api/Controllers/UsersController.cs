@@ -30,5 +30,19 @@ namespace Api.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+
+        [Authorize(Roles = "doctor")]
+        [HttpGet("{idDocument}")]
+        public async Task<ActionResult> GetProfileAsync(string idDocument)
+        {
+            return HandleResult(await Mediator.Send(new GetProfile.Query { IdDocument = idDocument }));
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> GetCurrentUserAsync()
+        {
+            return HandleResult(await Mediator.Send(new GetCurrent.Query { }));
+        }
     }
 }

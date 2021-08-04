@@ -15,32 +15,32 @@ namespace Application.Operations.Appointments
 {
     public class Edit
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result<AppointmentDto>>
         {
-            public int AppointmentId { get; set; }
-            public bool Canceled { get; set; }
-            public bool Completed { get; set; }
+            public AppointmentEditDto EditDto { get; set; }
         }
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(r => r.AppointmentId).NotEmpty();
+                RuleFor(r => r.EditDto.AppointmentId).NotEmpty();
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<Command, Result<AppointmentDto>>
         {
             private readonly AppDbContext _context;
             private readonly IUserAccessor _userAccessor;
-            public Handler(AppDbContext context, IUserAccessor userAccessor)
+            private readonly IMapper _mapper;
+            public Handler(AppDbContext context, IUserAccessor userAccessor, IMapper mapper)
             {
+                _mapper = mapper;
                 _userAccessor = userAccessor;
                 _context = context;
             }
 
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<AppointmentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.User.Include(x => x.Role)
                     .FirstOrDefaultAsync(x => x.IdDocument == _userAccessor.GetUserIdDocument());
@@ -49,26 +49,28 @@ namespace Application.Operations.Appointments
 
                 if (user.Role.Name == "doctor")
                 {
-                    appointment = _context.Appointment.Find(request.AppointmentId);
-                    if (appointment == null) return Result<Unit>.NotFound($"No se encontró la cita con el número {request.AppointmentId}");
+                    appointment = _context.Appointment.Include(s => s.Service).FirstOrDefault(x => x.Id == request.EditDto.AppointmentId);
+                    if (appointment == null) return Result<AppointmentDto>.NotFound($"No se encontró la cita con el número {request.EditDto.AppointmentId}");
 
-                    appointment.IsCancelled = request.Canceled;
-                    appointment.IsCompleted = request.Completed;
+                    appointment.IsCancelled = request.EditDto.Canceled;
+                    appointment.IsCompleted = request.EditDto.Completed;
                 }
                 else
                 {
-                    appointment = _context.Appointment.FirstOrDefault(x => x.Id == request.AppointmentId && x.PatientId == user.Id);
-                    if (appointment == null) return Result<Unit>.NotFound($"No tiene una cita con el número {request.AppointmentId}");
-                    appointment.IsCancelled = request.Canceled;
+                    appointment = _context.Appointment.Include(s => s.Service).FirstOrDefault(x => x.Id == request.EditDto.AppointmentId && x.PatientId == user.Id);
+                    if (appointment == null) return Result<AppointmentDto>.NotFound($"No tiene una cita con el número {request.EditDto.AppointmentId}");
+                    appointment.IsCancelled = request.EditDto.Canceled;
                 }
 
                 var result = await _context.SaveChangesAsync();
 
-                //Verifica si se guardaron
-                if (result > 0) return Result<Unit>.Success(Unit.Value);
-                if (result == 0) return Result<Unit>.Failure("No hubo cambios en la base de datos");
+                var appointmentDto = _mapper.Map<Appointment, AppointmentDto>(appointment);
 
-                return Result<Unit>.Failure("Error editando la cita");
+                //Verifica si se guardaron
+                if (result > 0) return Result<AppointmentDto>.Success(appointmentDto);
+                if (result == 0) return Result<AppointmentDto>.Failure("No hubo cambios en la base de datos");
+
+                return Result<AppointmentDto>.Failure("Error editando la cita");
             }
         }
     }

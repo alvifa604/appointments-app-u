@@ -10,6 +10,12 @@ namespace Application.Core
     {
         public MappingProfiles()
         {
+            CreateMap<User, Operations.Users.Dtos.Profile>()
+                .ForMember(d => d.Role, o => o.MapFrom(s => s.Role.Name))
+                .ForMember(d => d.Name, o => o.MapFrom(s => CapitalizeFirstLettter(s.Name)))
+                .ForMember(d => d.FirstLastname, o => o.MapFrom(s => CapitalizeFirstLettter(s.FirstLastname)))
+                .ForMember(d => d.SecondLastname, o => o.MapFrom(s => CapitalizeFirstLettter(s.SecondLastname)));
+
             CreateMap<Role, RoleDto>()
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(d => d.Name, o => o.MapFrom(s => CapitalizeFirstLettter(s.Name)));
