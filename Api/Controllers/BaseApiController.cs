@@ -18,10 +18,6 @@ namespace Api
             if (result.IsSuccess && result.Found && result.Value != null)
                 return Ok(result.Value);
 
-            //Se encarga de una respuesta 204, pero regresa not found 
-            if (result.Value == null)
-                return NotFound(result.Error);
-
             //Respuesta 404 
             if (result.IsSuccess && !result.Found)
                 return NotFound(result.Error);

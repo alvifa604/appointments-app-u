@@ -27,8 +27,7 @@ namespace Application.Operations.Appointments
             {
                 RuleFor(x => x.PacientIdDocument).NotEmpty().WithMessage("La cédula del paciente no puede estar vacía");
                 RuleFor(x => x.ServiceId).NotEmpty().WithMessage("El id del servicio no puede ser vacío");
-                RuleFor(x => x.Date).NotEmpty().WithMessage("Ingrese la fecha de la cita")
-                    .GreaterThan(DateTime.Now).WithMessage("La fecha de la cita debe ser superior a la fecha de hoy");
+                RuleFor(x => x.Date).NotEmpty().WithMessage("Ingrese la fecha de la cita");
             }
         }
 
@@ -46,6 +45,10 @@ namespace Application.Operations.Appointments
 
             public async Task<Result<AppointmentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
+                if (request.Date < DateTime.Now.AddDays(7))
+                    return Result<AppointmentDto>.Failure("Las citas deben agendarse al menos con una semana de anticipación");
+                
+
                 var user = await _context.User.Include(x => x.Role)
                     .FirstOrDefaultAsync(x => x.IdDocument == _userAccessor.GetUserIdDocument());
 
@@ -72,7 +75,8 @@ namespace Application.Operations.Appointments
 
                 //Obtiene el servicio a agendar
                 var service = await _context.Service.FirstOrDefaultAsync(x => x.Id == request.ServiceId);
-                if (service == null) return Result<AppointmentDto>.NotFound($"No hay un servicio con el id {request.ServiceId}");
+                if (service == null) 
+                    return Result<AppointmentDto>.NotFound($"No hay un servicio con el id {request.ServiceId}");
 
                 Appointment appointment = new()
                 {

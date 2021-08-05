@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -17,14 +15,9 @@ namespace Application.Operations.Appointments
     {
         public class Command : IRequest<Result<AppointmentDto>>
         {
-            public AppointmentEditDto EditDto { get; set; }
-        }
-        public class CommandValidator : AbstractValidator<Command>
-        {
-            public CommandValidator()
-            {
-                RuleFor(r => r.EditDto.AppointmentId).NotEmpty();
-            }
+            public int AppointmentId { get; set; }
+            public bool Canceled { get; set; }
+            public bool Completed { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<AppointmentDto>>
@@ -49,17 +42,17 @@ namespace Application.Operations.Appointments
 
                 if (user.Role.Name == "doctor")
                 {
-                    appointment = _context.Appointment.Include(s => s.Service).FirstOrDefault(x => x.Id == request.EditDto.AppointmentId);
-                    if (appointment == null) return Result<AppointmentDto>.NotFound($"No se encontró la cita con el número {request.EditDto.AppointmentId}");
+                    appointment = _context.Appointment.Include(s => s.Service).FirstOrDefault(x => x.Id == request.AppointmentId);
+                    if (appointment == null) return Result<AppointmentDto>.NotFound($"No se encontró la cita con el número {request.AppointmentId}");
 
-                    appointment.IsCancelled = request.EditDto.Canceled;
-                    appointment.IsCompleted = request.EditDto.Completed;
+                    appointment.IsCancelled = request.Canceled;
+                    appointment.IsCompleted = request.Completed;
                 }
                 else
                 {
-                    appointment = _context.Appointment.Include(s => s.Service).FirstOrDefault(x => x.Id == request.EditDto.AppointmentId && x.PatientId == user.Id);
-                    if (appointment == null) return Result<AppointmentDto>.NotFound($"No tiene una cita con el número {request.EditDto.AppointmentId}");
-                    appointment.IsCancelled = request.EditDto.Canceled;
+                    appointment = _context.Appointment.Include(s => s.Service).FirstOrDefault(x => x.Id == request.AppointmentId && x.PatientId == user.Id);
+                    if (appointment == null) return Result<AppointmentDto>.NotFound($"No tiene una cita con el número {request.AppointmentId}");
+                    appointment.IsCancelled = request.Canceled;
                 }
 
                 var result = await _context.SaveChangesAsync();

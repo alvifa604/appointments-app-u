@@ -25,7 +25,7 @@ namespace Api.Controllers
         }
 
         [Authorize(Roles = "doctor")]
-        [HttpPatch("edit-role")]
+        [HttpPatch("role")]
         public async Task<ActionResult> EditRoleAsync(EditRole.Command command)
         {
             return HandleResult(await Mediator.Send(command));

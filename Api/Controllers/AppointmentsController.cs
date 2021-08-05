@@ -30,9 +30,9 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPatch()]
-        public async Task<ActionResult> EditAppointmentAsync(AppointmentEditDto editDto)
+        public async Task<ActionResult> EditAppointmentAsync(Edit.Command command)
         {
-            return HandleResult(await Mediator.Send(new Edit.Command { EditDto = editDto }));
+            return HandleResult(await Mediator.Send(command));
         }
     }
 }
