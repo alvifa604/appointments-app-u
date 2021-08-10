@@ -45,8 +45,8 @@ namespace Application.Operations.Appointments
 
             public async Task<Result<AppointmentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                if (request.Date < DateTime.Now.AddDays(7))
-                    return Result<AppointmentDto>.Failure("Las citas deben agendarse al menos con una semana de anticipación");
+                if (request.Date < DateTime.Now.AddDays(5))
+                    return Result<AppointmentDto>.Failure("Las citas deben agendarse al menos cinco días de anticipación");
                 
 
                 var user = await _context.User.Include(x => x.Role)
