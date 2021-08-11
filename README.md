@@ -12,6 +12,6 @@ El presente proyecto es una API parte de una asignación univesitaria.  Esta API
   1. Clonar el proyecto
   2. Cambiar el `ConnectionStrings` en el archivo `appsettings.Development.json` por los parámetros propios de su sistema.
      * Ejemplo: `"DefaultConnection": "Server=localhost; Port=5432; User Id=postgres; Password=password; Database=Example"`
-  3. Ejecutar el comando `dotnet run -p api`
+  3. En el directorio de la solución, ejecutar el comando `dotnet run -p api`
   
 Una vez ejecutados los pasos anteriores, se realizarán las migraciones a la base datos automáticamente y podrá comenzar a hacer peticiones a la API utilizando Postman o la herramienta de su preferencia. 
