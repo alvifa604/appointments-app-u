@@ -6,7 +6,7 @@ El presente proyecto es una API parte de una asignación univesitaria.  Esta API
 ## Requisitos:
   * Tener instalado [.net 5](https://dotnet.microsoft.com/download)
   * Tener instalado y configurado [PostgreSQL](https://www.postgresql.org/download)
-  * Opcional: Tener [Postman](https://www.postman.com/downloads/)
+  * Opcional: Tener instalado [Postman](https://www.postman.com/downloads/)
 
 ## Pasos para ejecutar el proyecto:
   1. Clonar el proyecto
