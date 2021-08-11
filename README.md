@@ -1,4 +1,4 @@
-# Guía de ejecución de la API de la aplicación Su Salud
+# Guía para ejecutar localmente la API de la aplicación Su Salud
 
 ## Descripción del proyecto:  
 El presente proyecto es una API parte de una asignación univesitaria.  Esta API la consume la aplicación móvil [Su Salud](https://github.com/alvifa604/appointments-mobile), la cual es parte de la misma asignación. Este se elaboró utilizando arquitectura limpia, JSON Web Tokens (JWT) para el manejo de la autenticación, y PostgreSQL para el manejo de los datos. 
